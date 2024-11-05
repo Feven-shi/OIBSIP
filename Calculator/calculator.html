@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcuator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main">
+        <div class="digits">
+            <div class="grid-container">
+
+                <div class="type" style="grid-column: span 5; ">
+                    <div style="display: flex;">
+                        <div class="cal"></div>
+                        <span id="cursor">|</span> 
+                    </div>
+                    <div class="answer" style="float:right; margin-top: 20px; font-size: 30px; color: #235c68;">
+                        0
+                    </div>
+                </div>
+
+                <div class="grid-item inputs">(</div>
+                <div class="grid-item inputs">)</div>
+                <div class="grid-item icons" style="font-size: 20px;">ans</div>  
+                <div class="grid-item icons" style="font-size: 20px;">del</div>
+                <div class="grid-item icons" style="font-size: 20px;">clear</div>
+                  
+                <div class="grid-item inputs">7</div>
+                <div class="grid-item inputs">8</div>
+                <div class="grid-item inputs">9</div>  
+                <div class="grid-item inputs icons">%</div>
+                <div class="grid-item inputs icons">√</div>
+
+                <div class="grid-item inputs">4</div>
+                <div class="grid-item inputs">5</div>
+                <div class="grid-item inputs">6</div>
+                <div class="grid-item inputs icons">*</div>
+                <div class="grid-item inputs icons">/</div>
+
+                <div class="grid-item inputs">1</div>
+                <div class="grid-item inputs">2</div>
+                <div class="grid-item inputs">3</div>
+                <div class="grid-item inputs icons">+</div>
+                <div class="grid-item inputs icons">-</div>
+
+                <div class="grid-item inputs icons">.</div>
+                <div class="grid-item inputs">0</div>
+                <div class="grid-item inputs icons">±</div>
+                <div class="grid-item icon2" id="enter" style="grid-column: span 2; font-size: 20px;"> ENTER </div>
+
+              </div>
+        </div>
+    </div>
+    <script>      
+        // blink efferct
+        var cursor = true;
+        var speed = 250;
+        setInterval(() => {
+          if(cursor) {
+            document.getElementById('cursor').style.opacity = 0;
+            cursor = false;
+          }else {
+            document.getElementById('cursor').style.opacity = 1;
+            cursor = true;
+          }
+        }, speed);
+
+        const display = document.querySelector('.cal');
+        const answerDisplay = document.querySelector('.answer');
+        const buttons = document.querySelectorAll('.inputs, .icons');
+
+        let currentInput = '';
+
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                const value = button.textContent;
+
+                switch (value) {
+                    case 'ans':
+                        currentInput += answerDisplay.textContent;
+                        break;
+                    case 'del':
+                        currentInput = currentInput.slice(0, -1);
+                        break;
+                    case 'clear':
+                        currentInput = '';
+                        answerDisplay.textContent = '0';
+                        break;
+                    case '√':
+                        currentInput += 'Math.sqrt(';
+                        break;
+                    case '±':
+                        currentInput = currentInput.startsWith('-') ?
+                            currentInput.slice(1) : '-' + currentInput;
+                        break;
+                    default:
+                        currentInput += value;
+                }
+
+                display.textContent = currentInput;
+            });
+        });
+
+        const enterButton = document.getElementById('enter');
+        enterButton.addEventListener('click', () => {
+            try {
+                const result = eval(currentInput);
+                answerDisplay.textContent = result;
+                currentInput = result.toString();
+            } catch (error) {
+                answerDisplay.textContent = 'Error';
+            }
+        });
+
+        // const zinputs = document.querySelector('.cal')
+        // const buttons = document.getElementsByClassName('inputs')
+        // Array.from(buttons).forEach(element => {
+        //     element.addEventListener('click', function(){
+        //         const textNode = document.createTextNode(element.textContent);
+        //         zinputs.appendChild(textNode)
+        //     })  
+        // });
+
+        // const answer = document.querySelector('answer')
+        // const enter = document.getElementById('enter')
+        // enter.addEventListener('click', function (){
+        //     const expression = zinputs.textContent;
+        //     answer.innerHTML = eval(expression);
+        // })
+    </script>
+</body>
+</html>
